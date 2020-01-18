@@ -85,3 +85,20 @@ export const ProfileButtonText = styled.Text`
   color: #fff;
   text-transform: uppercase;
 `;
+
+export const DeleteUserButton = styled(RectButton)`
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+
+export const UserDelete = styled.View`
+  align-content: space-around;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+`;

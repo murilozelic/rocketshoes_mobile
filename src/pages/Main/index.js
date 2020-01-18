@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Keyboard, ActivityIndicator } from 'react-native';
+import { Keyboard, ActivityIndicator, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../../services/api';
@@ -17,6 +17,8 @@ import {
   Bio,
   ProfileButton,
   ProfileButtonText,
+  DeleteUserButton,
+  UserDelete,
 } from './styles';
 
 export default class Main extends Component {
@@ -55,30 +57,74 @@ export default class Main extends Component {
   handleAddUser = async () => {
     const { users, newUser } = this.state;
 
-    this.setState({ loading: true });
+    const userExists = users.filter(user => user.login === newUser);
 
-    const response = await api.get(`/users/${newUser}`);
+    if (userExists.length > 0) {
+      Alert.alert(
+        'Error',
+        'User already exists!',
+        [
+          {
+            text: 'Ok',
+          },
+        ],
+        { cancelable: true }
+      );
 
-    const data = {
-      name: response.data.name,
-      login: response.data.login,
-      bio: response.data.bio,
-      avatar: response.data.avatar_url,
-    };
+      this.setState({ loading: false, newUser: '' });
+    } else {
+      this.setState({ loading: true });
 
-    this.setState({
-      users: [...users, data],
-      newUser: '',
-      loading: false,
-    });
+      const response = await api.get(`/users/${newUser}`);
 
-    Keyboard.dismiss();
+      const data = {
+        name: response.data.name,
+        login: response.data.login,
+        bio: response.data.bio,
+        avatar: response.data.avatar_url,
+      };
+
+      this.setState({
+        users: [...users, data],
+        newUser: '',
+        loading: false,
+      });
+
+      Keyboard.dismiss();
+    }
   };
 
   handleNavigate = user => {
     const { navigation } = this.props;
 
     navigation.navigate('User', { user });
+  };
+
+  onDeleteUserPress = item => {
+    Alert.alert(
+      'Attention',
+      `Are you sure you want to remove ${
+        item.name !== null ? item.name : item.login
+      }?`,
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            const { users } = this.state;
+
+            const newUsers = users.filter(user => user !== item);
+
+            this.setState({ users: newUsers });
+          },
+        },
+        {
+          text: 'No',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   render() {
@@ -110,7 +156,19 @@ export default class Main extends Component {
           keyExtractor={user => user.login}
           renderItem={({ item }) => (
             <User>
-              <Avatar source={{ uri: item.avatar }} />
+              <UserDelete>
+                <Avatar source={{ uri: item.avatar }} />
+                <DeleteUserButton
+                  onPress={() => this.onDeleteUserPress(item)}
+                  on>
+                  <Icon
+                    name="remove-circle-outline"
+                    size={15}
+                    color="#7159c1"
+                  />
+                </DeleteUserButton>
+              </UserDelete>
+
               <Name>{item.name}</Name>
               <Bio>{item.bio}</Bio>
 

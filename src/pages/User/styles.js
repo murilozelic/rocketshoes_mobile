@@ -73,3 +73,10 @@ export const Author = styled.Text`
   color: #666;
   margin-top: 2px;
 `;
+
+export const StarsLoadingScreen = styled.View`
+  flex: 1;
+  justify-content: center;
+  padding: 0 10px;
+  margin-top: 20px;
+`;
