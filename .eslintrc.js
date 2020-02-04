@@ -27,5 +27,14 @@ module.exports = {
     ],
     'import/prefer-default-export': 'off',
     'react/state-in-constructor': 'off',
+    'jsx-a11y/control-has-associated-label': 'off',
+    'no-param-reassign': 'off',
+    'react/prefer-stateless-function': 'off',
+    'no-console': [
+      'error',
+      {
+        allow: ['tron'],
+      },
+    ],
   },
 };
