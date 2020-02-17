@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { formatPrice } from '../../util/format';
+import api from '../../services/api';
+
+import * as CartActions from '../../store/modules/cart/actions';
+
 import {
   Container,
   List,
@@ -12,10 +19,8 @@ import {
   AddCartCount,
   AddButtonText,
 } from './styles';
-import { formatPrice } from '../../util/format';
-import api from '../../services/api';
 
-export default class Home extends Component {
+class Home extends Component {
   state = {
     products: [],
   };
@@ -31,8 +36,15 @@ export default class Home extends Component {
     this.setState({ products: data });
   }
 
+  handleAddProduct = id => {
+    const { addToCartRequest } = this.props;
+
+    addToCartRequest(id);
+  };
+
   render() {
     const { products } = this.state;
+    const { amount } = this.props;
 
     return (
       <Container>
@@ -45,10 +57,10 @@ export default class Home extends Component {
               <ProductImage source={{ uri: item.image }} />
               <ProductTitle>{item.title}</ProductTitle>
               <ProductPrice>{item.priceFormatted}</ProductPrice>
-              <AddButton>
+              <AddButton onPress={() => this.handleAddProduct(item.id)}>
                 <AddToCart>
                   <Icon name="add-shopping-cart" size={16} color="#FFF" />
-                  <AddCartCount>1</AddCartCount>
+                  <AddCartCount>{amount[item.id] || 0}</AddCartCount>
                 </AddToCart>
                 <AddButtonText>ADICIONAR</AddButtonText>
               </AddButton>
@@ -59,3 +71,16 @@ export default class Home extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  amount: state.cart.reduce((amount, product) => {
+    amount[product.id] = product.amount;
+
+    return amount;
+  }, {}),
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

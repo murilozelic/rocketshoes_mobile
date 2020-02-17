@@ -133,3 +133,18 @@ export const CheckOutButtonText = styled.Text.attrs({
   color: #fff;
   font-weight: bold;
 `;
+
+export const DeleteProductButton = styled.TouchableOpacity``;
+
+export const EmptyContainer = styled.View`
+  display: flex;
+  padding: 40px;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 4px;
+`;
+
+export const EmptyText = styled.Text`
+  margin-top: 20px;
+`;

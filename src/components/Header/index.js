@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
 import Logo from '../../assets/images/Logo.png';
 
 import {
@@ -11,7 +12,7 @@ import {
   LogoImage,
 } from './styles';
 
-export default function Header({ navigation: { navigate } }) {
+function Header({ navigation: { navigate }, cartSize }) {
   return (
     <HeaderContainer>
       <LogoButton onPressOut={() => navigate('Home')}>
@@ -20,9 +21,13 @@ export default function Header({ navigation: { navigate } }) {
       <CartStatus onPressOut={() => navigate('Cart')}>
         <Icon name="shopping-basket" size={24} color="#FFF" />
         <ItemCount>
-          <ItemCountText>3</ItemCountText>
+          <ItemCountText>{cartSize}</ItemCountText>
         </ItemCount>
       </CartStatus>
     </HeaderContainer>
   );
 }
+
+export default connect(state => ({
+  cartSize: state.cart.length,
+}))(Header);
