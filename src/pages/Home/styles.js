@@ -17,13 +17,12 @@ export const List = styled.FlatList.attrs({
 
 export const ProductContainer = styled.View`
   width: 220px;
-  max-height: 358px;
   border-radius: 4px;
   background: #fff;
   padding: 10px;
   margin-right: ${props => (props.lastItem ? '0px' : '20px')};
   display: flex;
-  align-items: center;
+  justify-content: space-between;
 `;
 
 export const ProductName = styled.Text`
@@ -41,18 +40,19 @@ export const ProductTitle = styled.Text`
 `;
 
 export const ProductPrice = styled.Text`
-  margin: 14px 0px;
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-top: 10px;
 `;
 
-export const AddButton = styled.TouchableOpacity`
+export const AddButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})`
   background: #7159c1;
-  margin-top: auto;
   flex-direction: row;
   align-items: center;
   border-radius: 4px;
+  margin-top: auto;
 `;
 
 export const AddCartCount = styled.Text`
