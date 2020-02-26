@@ -89,7 +89,7 @@ export default function Cart() {
                         color="#7159c1"
                       />
                     </ProductQuantityRemoveButton>
-                    <QuantityTextInput maxLength={2} keyboardType="numeric">
+                    <QuantityTextInput editable={false}>
                       {item.amount}
                     </QuantityTextInput>
                     <ProductQuantityAddButton onPress={() => increment(item)}>
