@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Logo from '../../assets/images/Logo.png';
 
 import {
@@ -12,7 +12,9 @@ import {
   LogoImage,
 } from './styles';
 
-function Header({ navigation: { navigate }, cartSize }) {
+export default function Header({ navigation: { navigate } }) {
+  const cartSize = useSelector(state => state.cart.length);
+
   return (
     <HeaderContainer>
       <LogoButton onPressOut={() => navigate('Home')}>
@@ -27,7 +29,3 @@ function Header({ navigation: { navigate }, cartSize }) {
     </HeaderContainer>
   );
 }
-
-export default connect(state => ({
-  cartSize: state.cart.length,
-}))(Header);
